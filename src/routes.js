@@ -1,13 +1,13 @@
 import React from "react";
 import MainDashboard from "views/admin/default";
-import { FaBriefcase, FaBuilding } from "react-icons/fa";
+import { FaBriefcase, FaBuilding, FaUsers } from "react-icons/fa";
 import Companies from "views/admin/companies";
 import Occupation from "views/admin/occupation";
 import { MdHome, MdStarRate } from "react-icons/md";
 import TopRated from "views/admin/topRated";
 import Info from "views/admin/info";
 import InfoHub from "views/admin/infohub";
-import { BsInfoCircleFill } from "react-icons/bs";
+import { BsGlobe, BsInfoCircleFill, BsQuestionCircle } from "react-icons/bs";
 import { TiInfoLarge } from "react-icons/ti";
 
 const routes = [
@@ -19,39 +19,39 @@ const routes = [
     component: <MainDashboard />,
   },
   {
-    name: "Companies",
+    name: "Users",
     layout: "/admin",
-    path: "companies",
-    icon: <FaBuilding className="h-6 w-6" />,
+    path: "users",
+    icon: <FaUsers className="h-6 w-6" />,
     component: <Companies />,
   },
   {
-    name: "Top Rated",
+    name: "Installation",
     layout: "/admin",
-    path: "toprated",
-    icon: <MdStarRate className="h-6 w-6" />,
-    component: <TopRated />,
-  },
-  {
-    name: "Occupation",
-    layout: "/admin",
-    path: "occupation",
-    icon: <FaBriefcase className="h-6 w-6" />,
+    path: "installation",
+    icon: <BsGlobe className="h-6 w-6" />,
     component: <Occupation />,
   },
   {
-    name: "Info",
+    name: "Complain",
     layout: "/admin",
-    path: "info",
-    icon: <BsInfoCircleFill className="h-6 w-6" />,
-    component: <Info />,
+    path: "complain",
+    icon: <BsQuestionCircle className="h-6 w-6" />,
+    component: <TopRated />,
   },
-  {
-    name: "Info Hub",
-    layout: "/admin",
-    path: "hub",
-    icon: <TiInfoLarge className="h-6 w-6" />,
-    component: <InfoHub />,
-  },
+  // {
+  //   name: "Info",
+  //   layout: "/admin",
+  //   path: "info",
+  //   icon: <BsInfoCircleFill className="h-6 w-6" />,
+  //   component: <Info />,
+  // },
+  // {
+  //   name: "Info Hub",
+  //   layout: "/admin",
+  //   path: "hub",
+  //   icon: <TiInfoLarge className="h-6 w-6" />,
+  //   component: <InfoHub />,
+  // },
 ];
 export default routes;

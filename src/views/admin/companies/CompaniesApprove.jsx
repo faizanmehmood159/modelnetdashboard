@@ -9,7 +9,37 @@ import React, { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
 import { rejectCompany } from "api/admin";
+import { IoTrashSharp } from "react-icons/io5";
 const CompaniesApprove = () => {
+
+  const data = [
+    {
+      name: "John Doe",
+      email: "john.doe@example.com",
+      phone: "+923001234567"
+    },
+    {
+      name: "Jane Smith",
+      email: "jane.smith@example.com",
+      phone: "+923451234567"
+    },
+    {
+      name: "Alice Johnson",
+      email: "alice.johnson@example.com",
+      phone: "+923101234567"
+    },
+    {
+      name: "Bob Brown",
+      email: "bob.brown@example.com",
+      phone: "+923551234567"
+    },
+    {
+      name: "Emily Davis",
+      email: "emily.davis@example.com",
+      phone: "+923201234567"
+    }
+  ];
+  
   const [activeTab, setActiveTab] = useState("pending");
 
   const handleTabClick = (tab) => {
@@ -17,6 +47,7 @@ const CompaniesApprove = () => {
   };
   const [unapprovedCompanies, setUnapprovedCompanies] = useState([]);
   const [approved, setApproved] = useState([]);
+  
   const [loading, setLoading] = useState(true);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [rejectCompanyId, setRejectCompanyId] = useState(null);
@@ -125,177 +156,48 @@ const CompaniesApprove = () => {
   return (
     <Card extra={"w-full h-full p-4 overflow-hidden overflow-x-auto"}>
       <div className="container mx-auto mt-8">
-        <div className="flex space-x-4 overflow-hidden overflow-x-auto">
-          <button
-            className={`${
-              activeTab === "pending" ? "bg-blue-500 text-white" : "bg-gray-300"
-            } rounded px-4 py-2`}
-            onClick={() => handleTabClick("pending")}
-          >
-            Pending
-          </button>
-          <button
-            className={`${
-              activeTab === "approved"
-                ? "bg-green-500 text-white"
-                : "bg-gray-300"
-            } rounded px-4 py-2`}
-            onClick={() => handleTabClick("approved")}
-          >
-            Approved
-          </button>
-          <button
-            className={`${
-              activeTab === "rejected" ? "bg-red-500 text-white" : "bg-gray-300"
-            } rounded px-4 py-2`}
-            onClick={() => handleTabClick("rejected")}
-          >
-            Rejected
-          </button>
-        </div>
+        
 
         {/* Render content based on the active tab */}
-        {activeTab === "pending" && (
-          <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
-            <thead>
-              <tr className="bg-green-200">
-                <th className="px-4 py-2 text-white ">#</th>
-                <th className="px-4 py-2 text-white ">Name</th>
-                <th className="px-4 py-2 text-white">Email</th>
+       
+        <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
+      <thead>
+        <tr className="bg-green-200">
+          <th className="px-4 py-2 text-white">#</th>
+          <th className="px-4 py-2 text-white">Name</th>
+          <th className="px-4 py-2 text-white">Email</th>
+          <th className="px-4 py-2 text-white">Ph #</th>
+          <th className="px-4 py-2 text-white">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {/* Map through dummy data */}
+        {data.map((user, index) => (
+          <tr key={index} className=" text-center ">
+            <td className="px-4 py-2">{index + 1}</td>
+            <td className="px-4 py-2">{user.name}</td>
+            <td className="px-4 py-2">{user.email}</td>
+            <td className="px-4 py-2">{user.phone}</td>
+            <td className="px-4 py-2 flex items-center justify-center">
+              {/* <button
+                onClick={() => console.log("Approve action")}
+                className="mx-2 rounded bg-green-500 px-1 py-1 text-white hover:bg-green-600"
+              >
+                Approve
+              </button> */}
+              <button
+                onClick={() => console.log("Reject action")}
+                className="mx-2 rounded flex items-center justify-center bg-red-500 px-1 py-1 text-white hover:bg-red-600"
+              >
+                <IoTrashSharp />
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
 
-                <th className="px-4 py-2 text-white">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="5" className="py-4 text-center">
-                    Loading...
-                  </td>
-                </tr>
-              ) : (
-                unapprovedCompanies
-                  .filter(
-                    (company) =>
-                      company.approved === false && company.pending === true
-                  )
-                  .map((approvedCompany, index) => (
-                    <tr key={approvedCompany._id} className=" text-center ">
-                      <td className="px-4 py-2 ">{index + 1}</td>
-                      <td className="px-4 py-2 ">
-                        {approvedCompany.firstName}
-                      </td>
-                      <td className="px-4 py-2 ">{approvedCompany.email}</td>
-
-                      <td className="px-4 py-2 ">
-                        <button
-                          onClick={() => handleApprove(approvedCompany._id)}
-                          className="mx-2 rounded bg-green-500 px-1 py-1 text-white hover:bg-green-600"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleReject(approvedCompany._id)}
-                          className="mx-2 rounded bg-red-500 px-1 py-1 text-white hover:bg-red-600"
-                        >
-                          Reject
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
-        )}
-
-        {activeTab === "approved" && (
-          <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
-            <thead>
-              <tr className="bg-green-200">
-                <th className="px-4 py-2 text-white">#</th>
-                <th className="px-4 py-2 text-white">Name</th>
-                <th className="px-4 py-2 text-white">Email</th>
-
-                <th className="px-4 py-2 text-white">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="5" className="py-4 text-center">
-                    Loading...
-                  </td>
-                </tr>
-              ) : (
-                approved
-                  .filter((company) => company.approved === true)
-                  .map((approvedCompany, index) => (
-                    <tr key={approvedCompany._id} className=" text-center ">
-                      <td className="px-4 py-2 ">{index + 1}</td>
-                      <td className="px-4 py-2 ">
-                        {approvedCompany.firstName}
-                      </td>
-                      <td className="px-4 py-2 ">{approvedCompany.email}</td>
-
-                      <td className="px-4 py-2 ">
-                        <button
-                          onClick={() => handleDelete(approvedCompany._id)}
-                          className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
-        )}
-
-        {activeTab === "rejected" && (
-          <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
-            <thead>
-              <tr className="bg-brand-50">
-                <th className="px-4 py-2 text-white">#</th>
-                <th className="px-4 py-2 text-white">Name</th>
-                <th className="px-4 py-2 text-white">Email</th>
-
-                <th className="px-4 py-2 text-white">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="5" className="py-4 text-center">
-                    Loading...
-                  </td>
-                </tr>
-              ) : (
-                unapprovedCompanies
-                  .filter((company) => company.pending === false)
-                  .map((approvedCompany, index) => (
-                    <tr
-                      key={approvedCompany._id}
-                      className="bg-red-100 text-center"
-                    >
-                      <td className="px-4 py-2">{index + 1}</td>
-                      <td className="px-4 py-2">{approvedCompany.firstName}</td>
-                      <td className="px-4 py-2">{approvedCompany.email}</td>
-
-                      <td className="px-4 py-2">
-                        <button
-                          onClick={() => handleDelete(approvedCompany._id)}
-                          className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
-        )}
+   
       </div>
 
       {/* Modal for delete confirmation */}

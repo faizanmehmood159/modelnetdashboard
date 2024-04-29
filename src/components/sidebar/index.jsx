@@ -25,9 +25,9 @@ const Sidebar = ({ open, onClose }) => {
         <HiX />
       </span>
 
-      <div className={`mx-[56px] mt-[40px] flex items-center justify-center`}>
-        <div className="mt-1 ml-1 flex h-2.5 font-poppins text-[26px] font-bold uppercase text-navy-700 dark:text-white">
-          <img src={logo} alt="logo" className="h-10" />
+      <div className={`mx-[56px] mt-[20px]  mb-[20px] flex items-center justify-center`}>
+        <div className="mt-1 ml-1 flex h-3 font-poppins text-[26px] font-bold uppercase text-navy-700 dark:text-white">
+          <img src={logo} alt="logo" className="h-20 w-32" />
         </div>
       </div>
       <div className="mt-[50px] mb-7 h-px bg-gray-300 dark:bg-white/30" />

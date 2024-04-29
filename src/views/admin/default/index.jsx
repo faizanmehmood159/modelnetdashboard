@@ -4,7 +4,7 @@ import Widget from "components/widget/Widget";
 import { getStats } from "api/admin/stats";
 import { useEffect, useState } from "react";
 import { FiUsers } from "react-icons/fi";
-import { BsBuilding } from "react-icons/bs";
+import { BsBuilding, BsGlobe, BsQuestionCircle } from "react-icons/bs";
 import { RiAccountPinCircleLine } from "react-icons/ri";
 import MostSelected from "./components/MostSelected";
 import { FaLuggageCart } from "react-icons/fa";
@@ -31,28 +31,28 @@ const MainDashboard = () => {
 
   return (
     <div>
-      <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6">
+      <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-2 3xl:grid-cols-6">
         <Widget
           icon={<FiUsers className="h-7 w-7" />}
           title={"Total Users"}
           subtitle={statsData?.totalUsers}
         />
         <Widget
-          icon={<BsBuilding className="h-6 w-6" />}
-          title={"Total Companies"}
+          icon={<BsGlobe className="h-6 w-6" />}
+          title={"Total Connections"}
           subtitle={statsData?.totalCompanies}
         />
         <Widget
-          icon={<TiTick className="h-6 w-6" />}
-          title={"Approved Companies"}
+          icon={<BsQuestionCircle className="h-6 w-6" />}
+          title={"Total Complaints"}
           subtitle={statsData?.approveCompany !== undefined ? statsData?.approveCompany : "0"}
         />
         <Widget
-          icon={<RiAccountPinCircleLine className="h-7 w-7" />}
-          title={"Total Accounts"}
+          icon={<TiTick className="h-7 w-7" />}
+          title={"Resolved Complaints"}
           subtitle={statsData?.totalUsers + statsData?.totalCompanies}
         />
-        <Widget
+        {/* <Widget
           icon={<MdLocationCity className="h-6 w-6" />}
           title={"Registration Locations"}
           subtitle={totalLocations}
@@ -79,17 +79,17 @@ const MainDashboard = () => {
           icon={<FaLuggageCart className="h-6 w-6" />}
           title={"Not Arrived at Appointment"}
           subtitle={statsData?.notArrivedAtAppointment[0]?.count}
-        />
+        /> */}
       </div>
 
       {/* Charts */}
 
-      <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
+      {/* <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
         <MostSelected topCompanies={statsData?.mostSelectedCompany} />
         <RegistrationLocation
           registrationLocations={statsData?.registrationsLocations}
         />
-      </div>
+      </div> */}
 
       {/* Tables & Charts */}
     </div>

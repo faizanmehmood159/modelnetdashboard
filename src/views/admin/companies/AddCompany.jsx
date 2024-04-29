@@ -194,12 +194,12 @@ const AddCompany = () => {
               className="m-4 rounded-md bg-brand-500 px-4 py-2 text-white"
               onClick={() => setIsAddUserOpen(true)}
             >
-              Add Company
+              Add User
             </button>
           </div>
         </div>
       </Card>
-      {/* ADD Company */}
+      {/* Add User */}
       <Transition show={isAddUserOpen} as={React.Fragment}>
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
@@ -247,7 +247,7 @@ const AddCompany = () => {
                             className="text-lg font-medium leading-6 text-gray-900"
                             id="modal-title"
                           >
-                            Add Company
+                            Add User
                           </h1>
                           <button
                             onClick={handleClose}
@@ -281,7 +281,7 @@ const AddCompany = () => {
                                 htmlFor="firstName"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                               >
-                                Company Name
+                                Full Name
                               </label>
                               <input
                                 id="firstName"
@@ -332,12 +332,12 @@ const AddCompany = () => {
                                 htmlFor="password"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                               >
-                                Password
+                                Phone No.
                               </label>
                               <input
                                 id="password"
                                 name="password"
-                                type="password"
+                                type="number"
                                 autoComplete="new-password"
                                 value={userData.password}
                                 onChange={handleChange}
@@ -356,7 +356,7 @@ const AddCompany = () => {
                                 htmlFor="confirmPassword"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                               >
-                                Confirm Password
+                                Password
                               </label>
                               <input
                                 id="confirmPassword"
@@ -383,7 +383,7 @@ const AddCompany = () => {
                                 className="block text-sm font-medium text-gray-600"
                               >
                                 <MdFileUpload className="mx-auto mb-2 text-[80px] text-brand-500 dark:text-white" />
-                                Click to upload Company Image
+                                Click to upload User Image
                                 <input
                                   className="hidden"
                                   id="companyImage"
@@ -408,7 +408,7 @@ const AddCompany = () => {
                               type="submit"
                               className="border-transparent inline-flex justify-center rounded-md border bg-blue-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             >
-                              Add Company
+                              Add User
                             </button>
                           </div>
                         </form>

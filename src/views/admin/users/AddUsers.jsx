@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
-import { signUp } from "api/company/auth";
 import { MdFileUpload } from "react-icons/md";
 import Card from "components/card";
 import { toast } from "react-toastify";
-import { getCompanyUsers } from "api/company/users";
 import { useNavigate } from "react-router-dom";
 
 const AddUsers = () => {
@@ -23,25 +21,6 @@ const AddUsers = () => {
     companyImage: null,
   });
   const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    const fetchCompanyUsers = async () => {
-      try {
-        const id = localStorage.getItem("id");
-        const token = localStorage.getItem("jwttoken");
-        const response = await getCompanyUsers(id, token);
-        setData(response.data.data);
-        console.log(response);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-
-        console.error("Error fetching company users:", error);
-      }
-    };
-
-    fetchCompanyUsers();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -83,100 +62,100 @@ const AddUsers = () => {
     e.preventDefault();
     const companyId = localStorage.getItem("id");
 
-    try {
-      if (!userData.firstName) {
-        setErrors({
-          ...errors,
-          firstName: "Please Enter First Name",
-        });
-        return;
-      }
-      if (!userData.email) {
-        setErrors({
-          ...errors,
-          email: "Please Enter email",
-        });
-        return;
-      } else if (!isValidEmail(userData.email)) {
-        setErrors({
-          ...errors,
-          email: "Please enter valid email",
-        });
-        return;
-      }
-      if (!userData.password) {
-        setErrors({
-          ...errors,
-          password: "Please Enter password",
-        });
-        return;
-      }
-      if (userData.password.length < 8) {
-        setErrors({
-          ...errors,
-          password: "Password must be at least 8 characters long.",
-        });
-        return;
-      } else if (
-        !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/g.test(
-          userData.password
-        )
-      ) {
-        setErrors({
-          ...errors,
-          password:
-            "Password must be a combination of letters (at least 1 uppercase & 1 lowercase), digits, & special characters.",
-        });
-        return;
-      }
-      if (userData.password !== userData.confirmPassword) {
-        setErrors({
-          ...errors,
-          confirmPassword: "Passwords do not match",
-        });
-        return;
-      }
-      setAddLoading(true);
-      const formData = {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        password: userData.password,
-        cPassword: userData.confirmPassword,
-        companyId: companyId,
-        adminType: "company",
-        signupType: "AdminAddUsers",
-        companyImage: userData.companyImage,
-      };
+    // try {
+    //   if (!userData.firstName) {
+    //     setErrors({
+    //       ...errors,
+    //       firstName: "Please Enter First Name",
+    //     });
+    //     return;
+    //   }
+    //   if (!userData.email) {
+    //     setErrors({
+    //       ...errors,
+    //       email: "Please Enter email",
+    //     });
+    //     return;
+    //   } else if (!isValidEmail(userData.email)) {
+    //     setErrors({
+    //       ...errors,
+    //       email: "Please enter valid email",
+    //     });
+    //     return;
+    //   }
+    //   if (!userData.password) {
+    //     setErrors({
+    //       ...errors,
+    //       password: "Please Enter password",
+    //     });
+    //     return;
+    //   }
+    //   if (userData.password.length < 8) {
+    //     setErrors({
+    //       ...errors,
+    //       password: "Password must be at least 8 characters long.",
+    //     });
+    //     return;
+    //   } else if (
+    //     !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/g.test(
+    //       userData.password
+    //     )
+    //   ) {
+    //     setErrors({
+    //       ...errors,
+    //       password:
+    //         "Password must be a combination of letters (at least 1 uppercase & 1 lowercase), digits, & special characters.",
+    //     });
+    //     return;
+    //   }
+    //   if (userData.password !== userData.confirmPassword) {
+    //     setErrors({
+    //       ...errors,
+    //       confirmPassword: "Passwords do not match",
+    //     });
+    //     return;
+    //   }
+    //   setAddLoading(true);
+    //   const formData = {
+    //     firstName: userData.firstName,
+    //     lastName: userData.lastName,
+    //     email: userData.email,
+    //     password: userData.password,
+    //     cPassword: userData.confirmPassword,
+    //     companyId: companyId,
+    //     adminType: "company",
+    //     signupType: "AdminAddUsers",
+    //     companyImage: userData.companyImage,
+    //   };
 
-      const response = await signUp(formData);
-      if (response.data.status === 200) {
-        console.log(response);
-        toast.success("Company Added Successfully");
-        setAddLoading(false);
-        navigate("/admin/default");
-      }
-      setIsAddUserOpen(false);
+    //   const response = await signUp(formData);
+    //   if (response.data.status === 200) {
+    //     console.log(response);
+    //     toast.success("Company Added Successfully");
+    //     setAddLoading(false);
+    //     navigate("/admin/default");
+    //   }
+    //   setIsAddUserOpen(false);
 
-      setUserData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        companyImage: null,
-      });
+    //   setUserData({
+    //     firstName: "",
+    //     lastName: "",
+    //     email: "",
+    //     password: "",
+    //     confirmPassword: "",
+    //     companyImage: null,
+    //   });
 
-      setErrors({});
-    } catch (error) {
-      console.error(error);
-      setErrors({
-        ...errors,
-        general: "An error occurred while adding the user",
-      });
-    } finally {
-      setAddLoading(false);
-    }
+    //   setErrors({});
+    // } catch (error) {
+    //   console.error(error);
+    //   setErrors({
+    //     ...errors,
+    //     general: "An error occurred while adding the user",
+    //   });
+    // } finally {
+    //   setAddLoading(false);
+    // }
   };
 
   const handleClose = () => {

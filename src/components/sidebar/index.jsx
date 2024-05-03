@@ -3,14 +3,11 @@
 import { HiX } from "react-icons/hi";
 import Links from "./components/Links";
 import routes from "routes.js";
-import companyRoutes from "../../companyRoutes";
 import logo from "../../assets/img/auth/logo.png";
 const Sidebar = ({ open, onClose }) => {
-  const isCompanyLayout = companyRoutes.some((route) =>
-    window.location.pathname.startsWith(route.layout)
-  );
+ 
 
-  const currentRoutes = isCompanyLayout ? companyRoutes : routes;
+  const currentRoutes =  routes;
 
   return (
     <div

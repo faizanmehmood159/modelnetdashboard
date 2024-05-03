@@ -2,7 +2,6 @@ import Card from "components/card";
 import React, { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
-import { rejectCompany } from "api/admin";
 import { FaRegThumbsUp } from "react-icons/fa";
 import {
   BsEnvelopeFill,

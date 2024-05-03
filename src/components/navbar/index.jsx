@@ -2,20 +2,12 @@ import React, { useState, useEffect } from "react";
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
-import { BsArrowBarUp } from "react-icons/bs";
-import { IoMdNotificationsOutline } from "react-icons/io";
 import { toast } from "react-toastify";
-import { getCompanyDetails } from "api/company/profile";
-import { getProfile } from "api/company/profile";
 
 const Navbar = (props) => {
   const navigate = useNavigate();
-  const [companyDetails, setCompanyDetails] = useState(null);
-  const [companyName, setCompanyName] = useState(null);
   const avatar =
     "https://gravatar.com/avatar/890f940dd9ba3a41bf63dcb1f1e1300d?s=400&d=mp&r=x";
-  const avatarImage =
-    companyDetails && companyDetails.image ? companyDetails.image : avatar;
   const { onOpenSidenav, brandText } = props;
   const [adminType, setAdminType] = useState("");
   useEffect(() => {
@@ -28,38 +20,6 @@ const Navbar = (props) => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    const fetchCompanyDetails = async () => {
-      try {
-        const response = await getCompanyDetails();
-        setCompanyDetails(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchCompanyDetails();
-  }, []);
-
-  useEffect(() => {
-    const fetchCompanyDetails = async () => {
-      const token = localStorage.getItem("jwttoken");
-      const type = localStorage.getItem("adminType");
-
-      try {
-        const response = await getProfile(token);
-        if (type === "admin") {
-          setCompanyName("Admin");
-        } else {
-          setCompanyName(response.data.data.firstName);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchCompanyDetails();
-  }, []);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -103,7 +63,7 @@ const Navbar = (props) => {
           button={
             <img
               className="h-10 w-10 rounded-full"
-              src={avatarImage}
+              src={avatar}
               alt="Elon Musk"
             />
           }
@@ -112,7 +72,7 @@ const Navbar = (props) => {
               <div className="p-4">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
-                    👋 Hey {companyName}
+                    👋 Hey Admin
                   </p>{" "}
                 </div>
               </div>

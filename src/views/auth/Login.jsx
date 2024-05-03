@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/img/auth/logo.png";
-import { signIn } from "api/company/auth";
 import { toast } from "react-toastify";
 export default function Login() {
   const [email, setEmail] = useState("");

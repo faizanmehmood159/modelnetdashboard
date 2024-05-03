@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Admin from "layouts/admin";
-import Company from "layouts/company";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Auth from "layouts/auth";
@@ -29,7 +28,6 @@ const App = () => {
       <Routes>
         <Route path="auth/*" element={<Auth />} />
         <Route path="admin/*" element={<Admin />} />
-        <Route path="company/*" element={<Company />} />
         <Route path="/" element={<Navigate to="/admin" replace />} />
       </Routes>
     </>

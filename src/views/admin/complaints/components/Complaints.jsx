@@ -1,23 +1,15 @@
-import {
-  getUnApproveCompany,
-  approveCompany,
-  getApprovedPendingCompany,
-  deleteCompany,
-} from "api/admin";
 import Card from "components/card";
 import React, { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
 import { rejectCompany } from "api/admin";
-import { TiThumbsOk, TiThumbsUp } from "react-icons/ti";
-import { FaRegThumbsUp, FaThumbsDown } from "react-icons/fa";
+import { FaRegThumbsUp } from "react-icons/fa";
 import {
-  BsEnvelope,
   BsEnvelopeFill,
   BsPhoneFill,
-  BsQuestionCircle,
   BsQuestionCircleFill,
 } from "react-icons/bs";
+import { getAllComplaints } from "api/admin/complaints";
 
 const DummyData = [
   {
@@ -60,45 +52,28 @@ const ResolvedData = [
   },
 ];
 
-const Rated = () => {
+const Complaints = () => {
   const [activeTab, setActiveTab] = useState("pending");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-  const [unapprovedCompanies, setUnapprovedCompanies] = useState([]);
-  const [approved, setApproved] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [rejectCompanyId, setRejectCompanyId] = useState(null);
+  const [complaints, setComplaints] = useState([]);
 
   const [selectedDeleteCompanyId, setSelectedDeleteCompanyId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getUnApproveCompany();
-        console.log(response.data.data);
-        setUnapprovedCompanies(response.data.data);
+        const response = await getAllComplaints();
+        console.log(complaints);
+        setComplaints(response.data.data.complaints);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching unapproved companies:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("jwttoken");
-        const response = await getApprovedPendingCompany(token);
-        console.log(response.data.data);
-        setApproved(response.data.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching unapproved companies:", error);
+        console.error("Error fetching complaints:", error);
         setLoading(false);
       }
     };
@@ -120,57 +95,57 @@ const Rated = () => {
   };
 
   const confirmApprove = async () => {
-    try {
-      const token = localStorage.getItem("jwttoken");
+    // try {
+    //   const token = localStorage.getItem("jwttoken");
 
-      await approveCompany(selectedCompanyId);
-      setUnapprovedCompanies((prevCompanies) =>
-        prevCompanies.filter((company) => company._id !== selectedCompanyId)
-      );
-      setSelectedCompanyId(null);
-      const approvedResponse = await getApprovedPendingCompany(token);
-      setApproved(approvedResponse.data.data);
-      toast.success("Company approved successfully!");
-    } catch (error) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
-    }
+    //   await approveCompany(selectedCompanyId);
+    //   setUnapprovedCompanies((prevCompanies) =>
+    //     prevCompanies.filter((company) => company._id !== selectedCompanyId)
+    //   );
+    //   setSelectedCompanyId(null);
+    //   const approvedResponse = await getApprovedPendingCompany(token);
+    //   setApproved(approvedResponse.data.data);
+    //   toast.success("Company approved successfully!");
+    // } catch (error) {
+    //   console.error(error.response.data.message);
+    //   toast.error(error.response.data.message);
+    // }
   };
   const confirmReject = async () => {
-    try {
-      const token = localStorage.getItem("jwttoken");
+    // try {
+    //   const token = localStorage.getItem("jwttoken");
 
-      const response = await rejectCompany(rejectCompanyId);
-      setUnapprovedCompanies((prevCompanies) =>
-        prevCompanies.filter((company) => company._id !== rejectCompanyId)
-      );
-      console.log(response);
-      setRejectCompanyId(null);
-      const approvedResponse = await getApprovedPendingCompany(token);
-      setApproved(approvedResponse.data.data);
-      toast.success("Company Rejected successfully!");
-    } catch (error) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
-    }
+    //   const response = await rejectCompany(rejectCompanyId);
+    //   setUnapprovedCompanies((prevCompanies) =>
+    //     prevCompanies.filter((company) => company._id !== rejectCompanyId)
+    //   );
+    //   console.log(response);
+    //   setRejectCompanyId(null);
+    //   const approvedResponse = await getApprovedPendingCompany(token);
+    //   setApproved(approvedResponse.data.data);
+    //   toast.success("Company Rejected successfully!");
+    // } catch (error) {
+    //   console.error(error.response.data.message);
+    //   toast.error(error.response.data.message);
+    // }
   };
 
   const confirmDelete = async () => {
-    try {
-      const token = localStorage.getItem("jwttoken");
+    // try {
+    //   const token = localStorage.getItem("jwttoken");
 
-      await deleteCompany(selectedDeleteCompanyId, token);
-      setApproved((prevCompanies) =>
-        prevCompanies.filter(
-          (company) => company._id !== selectedDeleteCompanyId
-        )
-      );
-      setSelectedDeleteCompanyId(null);
-      toast.success("Company deleted successfully!");
-    } catch (error) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
-    }
+    //   await deleteCompany(selectedDeleteCompanyId, token);
+    //   setApproved((prevCompanies) =>
+    //     prevCompanies.filter(
+    //       (company) => company._id !== selectedDeleteCompanyId
+    //     )
+    //   );
+    //   setSelectedDeleteCompanyId(null);
+    //   toast.success("Company deleted successfully!");
+    // } catch (error) {
+    //   console.error(error.response.data.message);
+    //   toast.error(error.response.data.message);
+    // }
   };
 
   return (
@@ -199,51 +174,51 @@ const Rated = () => {
 
         {/* Render content based on the active tab */}
         {activeTab === "pending" && (
-          <div className="mt-4 grid max-h-[70vh] grid-cols-1 gap-4 overflow-y-auto p-4 md:grid-cols-2 lg:grid-cols-3">
-            {loading ? (
-              <div className="col-span-full py-4 text-center">Loading...</div>
-            ) : (
-              DummyData.map((item) => (
-                <div
-                  key={item.id}
-                  className="rounded-lg bg-blue-100 p-6 shadow-md"
-                >
-                  <div className="flex flex-row items-center justify-between">
-                    <h3 className="mb-4 text-lg font-semibold">{item.name}</h3>
-                    <p className="mb-4 text-sm">12-jan-2022</p>
-                  </div>
-
-                  <div className="mb-2 flex items-center justify-between text-sm text-gray-900">
-                    <p className="text-blue-600">
-                      <BsEnvelopeFill />{" "}
-                    </p>{" "}
-                    <p>{item.email}</p>
-                  </div>
-                  <div className="mb-2 flex items-center justify-between text-sm  text-gray-900">
-                    <p className="text-blue-600 ">
-                      <BsPhoneFill />
-                    </p>{" "}
-                    <p> {item.phone}</p>
-                  </div>
-                  <div className="mb-2 flex items-center text-sm text-gray-900">
-                    <p className="text-blue-600 ">
-                      <BsQuestionCircleFill />{" "}
-                    </p>
-                    <span className="text-blue-600 ">Complaint:</span>
-                  </div>
-                  <div className="text-xs">
-                    <p> {item.complaint}</p>
-                  </div>
-
-                  <div className="flex justify-center">
-                    <button className="rounded-full bg-green-500 p-2 text-white shadow-lg hover:bg-green-600">
-                      <FaRegThumbsUp />
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+      <div className="mt-4 grid max-h-[70vh] grid-cols-1 gap-4 overflow-y-auto p-4 md:grid-cols-2 lg:grid-cols-3">
+      {loading ? (
+        <div className="col-span-full py-4 text-center">Loading...</div>
+      ) : (
+        complaints.map((item) => (
+          item.status === "pending" && (
+            <div key={item.id} className="rounded-lg bg-blue-100 p-6 shadow-md">
+              <div className="flex flex-row items-center justify-between">
+                <h3 className="mb-4 text-lg font-semibold">{item.name}</h3>
+                <p className="mb-4 text-sm">12-jan-2022</p>
+              </div>
+      
+              <div className="mb-2 flex items-center justify-between text-sm text-gray-900">
+                <p className="text-blue-600">
+                  <BsEnvelopeFill />{" "}
+                </p>{" "}
+                <p>{item.email}</p>
+              </div>
+              <div className="mb-2 flex items-center justify-between text-sm  text-gray-900">
+                <p className="text-blue-600 ">
+                  <BsPhoneFill />
+                </p>{" "}
+                <p> {item.phone_no}</p>
+              </div>
+              <div className="mb-2 flex items-center text-sm text-gray-900">
+                <p className="text-blue-600 ">
+                  <BsQuestionCircleFill />{" "}
+                </p>
+                <span className="text-blue-600 ">Complaint:</span>
+              </div>
+              <div className="text-xs">
+                <p> {item.complaint}</p>
+              </div>
+      
+              <div className="flex justify-center">
+                <button className="rounded-full bg-green-500 p-2 text-white shadow-lg hover:bg-green-600">
+                  <FaRegThumbsUp />
+                </button>
+              </div>
+            </div>
+          )
+        ))
+      )}
+    </div>
+    
         )}
 
         {activeTab === "approved" && (
@@ -251,7 +226,8 @@ const Rated = () => {
             {loading ? (
               <div className="col-span-full py-4 text-center">Loading...</div>
             ) : (
-              ResolvedData.map((item) => (
+              complaints.map((item) => (
+                item.status === "resolved" && (
                 <div
                   key={item.id}
                   className="rounded-lg bg-green-100 p-6 shadow-md"
@@ -283,6 +259,7 @@ const Rated = () => {
                     <p> {item.complaint}</p>
                   </div>
                 </div>
+                )
               ))
             )}
           </div>
@@ -576,4 +553,4 @@ const Rated = () => {
   );
 };
 
-export default Rated;
+export default Complaints;

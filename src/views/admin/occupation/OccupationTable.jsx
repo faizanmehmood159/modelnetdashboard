@@ -9,7 +9,6 @@ import React, { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
 import { rejectCompany } from "api/admin";
-import { TiThumbsOk, TiThumbsUp } from "react-icons/ti";
 import { FaRegThumbsUp, FaThumbsDown } from "react-icons/fa";
 const OccupationTable = () => {
   const [activeTab, setActiveTab] = useState("pending");

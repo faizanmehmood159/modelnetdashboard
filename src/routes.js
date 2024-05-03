@@ -1,14 +1,11 @@
 import React from "react";
 import MainDashboard from "views/admin/default";
-import { FaBriefcase, FaBuilding, FaUsers } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
 import Companies from "views/admin/companies";
 import Occupation from "views/admin/occupation";
-import { MdHome, MdStarRate } from "react-icons/md";
-import TopRated from "views/admin/topRated";
-import Info from "views/admin/info";
-import InfoHub from "views/admin/infohub";
-import { BsGlobe, BsInfoCircleFill, BsQuestionCircle } from "react-icons/bs";
-import { TiInfoLarge } from "react-icons/ti";
+import { MdHome } from "react-icons/md";
+import { BsGlobe, BsQuestionCircle } from "react-icons/bs";
+import ComplaintsMain from "views/admin/complaints/components";
 
 const routes = [
   {
@@ -37,7 +34,7 @@ const routes = [
     layout: "/admin",
     path: "complain",
     icon: <BsQuestionCircle className="h-6 w-6" />,
-    component: <TopRated />,
+    component: <ComplaintsMain />,
   },
   // {
   //   name: "Info",

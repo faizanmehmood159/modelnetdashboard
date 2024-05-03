@@ -9,3 +9,4 @@ export const API_BASE_URL = "http://localhost:4500/api/v1/auth/";
 
 
 export const API_AUTH_URL = "http://192.168.1.6:8000/api/v1/auth/";
+export const API_URL = "http://192.168.1.6:8000/api/v1/";

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { getCompanyUsers } from "api/company/users";
 import { useNavigate } from "react-router-dom";
 
-const AddCompany = () => {
+const AddUsers = () => {
   const navigate = useNavigate();
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [data, setData] = useState([]);
@@ -145,7 +145,7 @@ const AddCompany = () => {
         cPassword: userData.confirmPassword,
         companyId: companyId,
         adminType: "company",
-        signupType: "AdminAddCompany",
+        signupType: "AdminAddUsers",
         companyImage: userData.companyImage,
       };
 
@@ -425,4 +425,4 @@ const AddCompany = () => {
   );
 };
 
-export default AddCompany;
+export default AddUsers;

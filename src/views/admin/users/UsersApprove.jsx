@@ -10,7 +10,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
 import { rejectCompany } from "api/admin";
 import { IoTrashSharp } from "react-icons/io5";
-const CompaniesApprove = () => {
+const UsersApprove = () => {
 
   const data = [
     {
@@ -487,4 +487,4 @@ const CompaniesApprove = () => {
   );
 };
 
-export default CompaniesApprove;
+export default UsersApprove;

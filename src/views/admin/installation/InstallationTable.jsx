@@ -10,7 +10,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
 import { rejectCompany } from "api/admin";
 import { FaRegThumbsUp, FaThumbsDown } from "react-icons/fa";
-const OccupationTable = () => {
+const InstallationTable = () => {
   const [activeTab, setActiveTab] = useState("pending");
 
   const handleTabClick = (tab) => {
@@ -580,4 +580,4 @@ const OccupationTable = () => {
   );
 };
 
-export default OccupationTable;
+export default InstallationTable;

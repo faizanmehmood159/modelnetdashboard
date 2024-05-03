@@ -2,10 +2,10 @@ import React from "react";
 import MainDashboard from "views/admin/default";
 import { FaUsers } from "react-icons/fa";
 import Companies from "views/admin/companies";
-import Occupation from "views/admin/occupation";
 import { MdHome } from "react-icons/md";
 import { BsGlobe, BsQuestionCircle } from "react-icons/bs";
 import ComplaintsMain from "views/admin/complaints/components";
+import Installation from "views/admin/installation";
 
 const routes = [
   {
@@ -27,7 +27,7 @@ const routes = [
     layout: "/admin",
     path: "installation",
     icon: <BsGlobe className="h-6 w-6" />,
-    component: <Occupation />,
+    component: <Installation />,
   },
   {
     name: "Complain",

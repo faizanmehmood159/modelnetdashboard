@@ -47,17 +47,12 @@ const MainDashboard = () => {
           subtitle={statsData?.totalResolvedComplaints}
         />
       </div>
-
-      {/* Charts */}
-
       <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
         <Users users={statsData} />
         <Complaints
           complaints={statsData}
         />
       </div>
-
-      {/* Tables & Charts */}
     </div>
   );
 };

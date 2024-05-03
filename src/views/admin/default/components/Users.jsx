@@ -2,17 +2,7 @@ import React from "react";
 import Card from "components/card";
 import Chart from "react-apexcharts";
 
-const MostSelected = ({ topCompanies }) => {
-  if (!topCompanies || !Array.isArray(topCompanies)) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <div className="h-16 w-16 animate-spin rounded-full border-b-2 border-t-2 border-brand-600"></div>
-      </div>
-    );
-  }
-
-  const companyNames = topCompanies.map((company) => company.companyName);
-  const counts = topCompanies.map((company) => company.count);
+const Users = ({ users }) => {
 
   const options = {
     chart: {
@@ -20,7 +10,7 @@ const MostSelected = ({ topCompanies }) => {
       foreColor: "black",
     },
     xaxis: {
-      categories: companyNames,
+      categories: ["Total Users", "Total Installations"],
       labels: {
         style: {
           colors: "#004871",
@@ -29,7 +19,7 @@ const MostSelected = ({ topCompanies }) => {
     },
     yaxis: {
       title: {
-        text: "User Count",
+        text: "Count",
         style: {
           color: "#004871",
         },
@@ -42,7 +32,7 @@ const MostSelected = ({ topCompanies }) => {
     },
     colors: ["#004871"],
     stroke: {
-      width: 6,
+      width: 2,
       curve: "smooth",
       lineCap: "round",
       lineJoin: "round",
@@ -50,10 +40,11 @@ const MostSelected = ({ topCompanies }) => {
       colors: ["#004871"],
     },
   };
+  
   const series = [
     {
-      name: "User Counts",
-      data: counts,
+      name: "Count",
+      data: [users?.totalUsers, users?.totalInstallation],
     },
   ];
 
@@ -61,7 +52,7 @@ const MostSelected = ({ topCompanies }) => {
     <Card extra="!p-[20px] text-center">
       <div className="flex justify-between">
         <span className="text-lg font-bold text-navy-600 dark:text-white">
-          Most Selected Companies
+          Users/Installations
         </span>
       </div>
 
@@ -69,7 +60,7 @@ const MostSelected = ({ topCompanies }) => {
         <div className="h-full w-full">
           <Chart
             options={options}
-            type="line"
+            type="bar"
             width="100%"
             height="400"
             series={series}
@@ -80,4 +71,4 @@ const MostSelected = ({ topCompanies }) => {
   );
 };
 
-export default MostSelected;
+export default Users;

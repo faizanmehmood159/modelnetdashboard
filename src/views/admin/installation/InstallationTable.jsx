@@ -1,17 +1,11 @@
-import {
-  getUnApproveCompany,
-  approveCompany,
-  getApprovedPendingCompany,
-  deleteCompany,
-} from "api/admin";
 import Card from "components/card";
 import React, { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { toast } from "react-toastify";
-import { rejectCompany } from "api/admin";
 import { FaRegThumbsUp, FaThumbsDown } from "react-icons/fa";
+import { getAllInstallations } from "api/admin/installations";
 const InstallationTable = () => {
   const [activeTab, setActiveTab] = useState("pending");
+  const [allInstallations, setAllInstallations] = useState([]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -27,35 +21,18 @@ const InstallationTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getUnApproveCompany();
-        console.log(response.data.data);
-        setUnapprovedCompanies(response.data.data);
+        const response = await getAllInstallations();
+        console.log(response.data.data.installations);
+        setAllInstallations(response.data.data.installations);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching unapproved companies:", error);
+        console.error("Error fetching installations:", error);
         setLoading(false);
       }
     };
 
     fetchData();
   }, []);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("jwttoken");
-        const response = await getApprovedPendingCompany(token);
-        console.log(response.data.data);
-        setApproved(response.data.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching unapproved companies:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const handleApprove = async (companyId) => {
     setSelectedCompanyId(companyId);
   };
@@ -70,57 +47,54 @@ const InstallationTable = () => {
   };
 
   const confirmApprove = async () => {
-    try {
-      const token = localStorage.getItem("jwttoken");
-
-      await approveCompany(selectedCompanyId);
-      setUnapprovedCompanies((prevCompanies) =>
-        prevCompanies.filter((company) => company._id !== selectedCompanyId)
-      );
-      setSelectedCompanyId(null);
-      const approvedResponse = await getApprovedPendingCompany(token);
-      setApproved(approvedResponse.data.data);
-      toast.success("Company approved successfully!");
-    } catch (error) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
-    }
+    // try {
+    //   const token = localStorage.getItem("jwttoken");
+    //   await approveCompany(selectedCompanyId);
+    //   setUnapprovedCompanies((prevCompanies) =>
+    //     prevCompanies.filter((company) => company._id !== selectedCompanyId)
+    //   );
+    //   setSelectedCompanyId(null);
+    //   const approvedResponse = await getApprovedPendingCompany(token);
+    //   setApproved(approvedResponse.data.data);
+    //   toast.success("Company approved successfully!");
+    // } catch (error) {
+    //   console.error(error.response.data.message);
+    //   toast.error(error.response.data.message);
+    // }
   };
   const confirmReject = async () => {
-    try {
-      const token = localStorage.getItem("jwttoken");
-
-      const response = await rejectCompany(rejectCompanyId);
-      setUnapprovedCompanies((prevCompanies) =>
-        prevCompanies.filter((company) => company._id !== rejectCompanyId)
-      );
-      console.log(response);
-      setRejectCompanyId(null);
-      const approvedResponse = await getApprovedPendingCompany(token);
-      setApproved(approvedResponse.data.data);
-      toast.success("Company Rejected successfully!");
-    } catch (error) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
-    }
+    // try {
+    //   const token = localStorage.getItem("jwttoken");
+    //   const response = await rejectCompany(rejectCompanyId);
+    //   setUnapprovedCompanies((prevCompanies) =>
+    //     prevCompanies.filter((company) => company._id !== rejectCompanyId)
+    //   );
+    //   console.log(response);
+    //   setRejectCompanyId(null);
+    //   const approvedResponse = await getApprovedPendingCompany(token);
+    //   setApproved(approvedResponse.data.data);
+    //   toast.success("Company Rejected successfully!");
+    // } catch (error) {
+    //   console.error(error.response.data.message);
+    //   toast.error(error.response.data.message);
+    // }
   };
 
   const confirmDelete = async () => {
-    try {
-      const token = localStorage.getItem("jwttoken");
-
-      await deleteCompany(selectedDeleteCompanyId, token);
-      setApproved((prevCompanies) =>
-        prevCompanies.filter(
-          (company) => company._id !== selectedDeleteCompanyId
-        )
-      );
-      setSelectedDeleteCompanyId(null);
-      toast.success("Company deleted successfully!");
-    } catch (error) {
-      console.error(error.response.data.message);
-      toast.error(error.response.data.message);
-    }
+    // try {
+    //   const token = localStorage.getItem("jwttoken");
+    //   await deleteCompany(selectedDeleteCompanyId, token);
+    //   setApproved((prevCompanies) =>
+    //     prevCompanies.filter(
+    //       (company) => company._id !== selectedDeleteCompanyId
+    //     )
+    //   );
+    //   setSelectedDeleteCompanyId(null);
+    //   toast.success("Company deleted successfully!");
+    // } catch (error) {
+    //   console.error(error.response.data.message);
+    //   toast.error(error.response.data.message);
+    // }
   };
 
   return (
@@ -157,51 +131,51 @@ const InstallationTable = () => {
 
         {/* Render content based on the active tab */}
         {activeTab === "pending" && (
-  <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
-    <thead>
-      <tr className="bg-green-200">
-        <th className="px-4 py-2 text-white">#</th>
-        <th className="px-4 py-2 text-white">Name</th>
-        <th className="px-4 py-2 text-white">Email</th>
-        <th className="px-4 py-2 text-white">Ph #</th>
-        <th className="px-4 py-2 text-white">CNIC</th>
-        <th className="px-4 py-2 text-white">Address</th>
-        <th className="px-4 py-2 text-white">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {loading ? (
-        <tr>
-          <td colSpan="7" className="py-4 text-center">
-            Loading...
-          </td>
-        </tr>
-      ) : (
-        <tr className=" text-center ">
-          <td className="px-4 py-2">1</td>
-          <td className="px-4 py-2">Ali</td>
-          <td className="px-4 py-2">ali@gmal.com</td>
-          <td className="px-4 py-2">+9261526357634</td>
-          <td className="px-4 py-2">33301-8777987-4</td>
-          <td className="px-4 py-2">street abc, city xyz</td>
-          <td className="px-4 py-2">
-            <button
-              className="mx-2 p-2 rounded bg-green-500  shadow-lg  text-white hover:bg-green-600"
-            >
-              <FaRegThumbsUp />
-            </button>
-            <button
-              className="mx-2 p-2 rounded bg-red-500  text-white  shadow-lg hover:bg-red-600"
-            >
-              <FaThumbsDown />
-            </button>
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-)}
-
+          <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
+            <thead>
+              <tr className="bg-green-200">
+                <th className="px-4 py-2 text-white">#</th>
+                <th className="px-4 py-2 text-white">Name</th>
+                <th className="px-4 py-2 text-white">Email</th>
+                <th className="px-4 py-2 text-white">Ph #</th>
+                <th className="px-4 py-2 text-white">CNIC</th>
+                <th className="px-4 py-2 text-white">Address</th>
+                <th className="px-4 py-2 text-white">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan="7" className="py-4 text-center">
+                    Loading...
+                  </td>
+                </tr>
+              ) : (
+                allInstallations.map(
+                  (item, index) =>
+                    item.status === "pending" && (
+                      <tr className=" text-center " id={item._id}>
+                        <td className="px-4 py-2">{index + 1}</td>
+                        <td className="px-4 py-2">{item.name}</td>
+                        <td className="px-4 py-2">{item.email}</td>
+                        <td className="px-4 py-2">{item.phone_no}</td>
+                        <td className="px-4 py-2">{item.cnic}</td>
+                        <td className="px-4 py-2">{item.address}</td>
+                        <td className="px-4 py-2">
+                          <button className="mx-2 rounded bg-green-500 p-2  text-white  shadow-lg hover:bg-green-600">
+                            <FaRegThumbsUp />
+                          </button>
+                          <button className="mx-2 rounded bg-red-500 p-2  text-white  shadow-lg hover:bg-red-600">
+                            <FaThumbsDown />
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                )
+              )}
+            </tbody>
+          </table>
+        )}
 
         {activeTab === "approved" && (
           <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
@@ -210,38 +184,41 @@ const InstallationTable = () => {
                 <th className="px-4 py-2 text-white">#</th>
                 <th className="px-4 py-2 text-white">Name</th>
                 <th className="px-4 py-2 text-white">Email</th>
-
+                <th className="px-4 py-2 text-white">Ph #</th>
+                <th className="px-4 py-2 text-white">CNIC</th>
+                <th className="px-4 py-2 text-white">Address</th>
                 <th className="px-4 py-2 text-white">Action</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="py-4 text-center">
+                  <td colSpan="7" className="py-4 text-center">
                     Loading...
                   </td>
                 </tr>
               ) : (
-                approved
-                  .filter((company) => company.approved === true)
-                  .map((approvedCompany, index) => (
-                    <tr key={approvedCompany._id} className=" text-center ">
-                      <td className="px-4 py-2 ">{index + 1}</td>
-                      <td className="px-4 py-2 ">
-                        {approvedCompany.firstName}
-                      </td>
-                      <td className="px-4 py-2 ">{approvedCompany.email}</td>
-
-                      <td className="px-4 py-2 ">
-                        <button
-                          onClick={() => handleDelete(approvedCompany._id)}
-                          className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                allInstallations.map(
+                  (item, index) =>
+                    item.status === "approved" && (
+                      <tr className=" text-center " id={item._id}>
+                        <td className="px-4 py-2">{index + 1}</td>
+                        <td className="px-4 py-2">{item.name}</td>
+                        <td className="px-4 py-2">{item.email}</td>
+                        <td className="px-4 py-2">{item.phone_no}</td>
+                        <td className="px-4 py-2">{item.cnic}</td>
+                        <td className="px-4 py-2">{item.address}</td>
+                        <td className="px-4 py-2">
+                          <button className="mx-2 rounded bg-green-500 p-2  text-white  shadow-lg hover:bg-green-600">
+                            <FaRegThumbsUp />
+                          </button>
+                          <button className="mx-2 rounded bg-red-500 p-2  text-white  shadow-lg hover:bg-red-600">
+                            <FaThumbsDown />
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                )
               )}
             </tbody>
           </table>
@@ -250,43 +227,45 @@ const InstallationTable = () => {
         {activeTab === "rejected" && (
           <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
             <thead>
-              <tr className="bg-brand-50">
+              <tr className="bg-green-200">
                 <th className="px-4 py-2 text-white">#</th>
                 <th className="px-4 py-2 text-white">Name</th>
                 <th className="px-4 py-2 text-white">Email</th>
-
+                <th className="px-4 py-2 text-white">Ph #</th>
+                <th className="px-4 py-2 text-white">CNIC</th>
+                <th className="px-4 py-2 text-white">Address</th>
                 <th className="px-4 py-2 text-white">Action</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="py-4 text-center">
+                  <td colSpan="7" className="py-4 text-center">
                     Loading...
                   </td>
                 </tr>
               ) : (
-                unapprovedCompanies
-                  .filter((company) => company.pending === false)
-                  .map((approvedCompany, index) => (
-                    <tr
-                      key={approvedCompany._id}
-                      className="bg-red-100 text-center"
-                    >
-                      <td className="px-4 py-2">{index + 1}</td>
-                      <td className="px-4 py-2">{approvedCompany.firstName}</td>
-                      <td className="px-4 py-2">{approvedCompany.email}</td>
-
-                      <td className="px-4 py-2">
-                        <button
-                          onClick={() => handleDelete(approvedCompany._id)}
-                          className="rounded bg-red-500 px-2 py-1 text-white hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                allInstallations.map(
+                  (item, index) =>
+                    item.status === "rejected" && (
+                      <tr className=" text-center " id={item._id}>
+                        <td className="px-4 py-2">{index + 1}</td>
+                        <td className="px-4 py-2">{item.name}</td>
+                        <td className="px-4 py-2">{item.email}</td>
+                        <td className="px-4 py-2">{item.phone_no}</td>
+                        <td className="px-4 py-2">{item.cnic}</td>
+                        <td className="px-4 py-2">{item.address}</td>
+                        <td className="px-4 py-2">
+                          <button className="mx-2 rounded bg-green-500 p-2  text-white  shadow-lg hover:bg-green-600">
+                            <FaRegThumbsUp />
+                          </button>
+                          <button className="mx-2 rounded bg-red-500 p-2  text-white  shadow-lg hover:bg-red-600">
+                            <FaThumbsDown />
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                )
               )}
             </tbody>
           </table>
@@ -377,7 +356,7 @@ const InstallationTable = () => {
                   <button
                     onClick={() => setSelectedDeleteCompanyId(null)}
                     type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
+                    className="hover:bg-gray-50 mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
                   >
                     Cancel
                   </button>
@@ -471,7 +450,7 @@ const InstallationTable = () => {
                   <button
                     onClick={() => setSelectedCompanyId(null)}
                     type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
+                    className="hover:bg-gray-50 mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
                   >
                     Cancel
                   </button>
@@ -566,7 +545,7 @@ const InstallationTable = () => {
                   <button
                     onClick={() => setRejectCompanyId(null)}
                     type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
+                    className="hover:bg-gray-50 mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
                   >
                     Cancel
                   </button>

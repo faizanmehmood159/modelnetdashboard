@@ -5,37 +5,9 @@ import { toast } from "react-toastify";
 import { IoTrashSharp } from "react-icons/io5";
 import { getAllUsers } from "api/admin/users";
 const UsersApprove = () => {
-
-  const data = [
-    {
-      name: "Doe",
-      email: "john.doe@example.com",
-      phone: "+923001234567"
-    },
-    {
-      name: "Jane Smith",
-      email: "jane.smith@example.com",
-      phone: "+923451234567"
-    },
-    {
-      name: "Alice Johnson",
-      email: "alice.johnson@example.com",
-      phone: "+923101234567"
-    },
-    {
-      name: "Bob Brown",
-      email: "bob.brown@example.com",
-      phone: "+923551234567"
-    },
-    {
-      name: "Emily Davis",
-      email: "emily.davis@example.com",
-      phone: "+923201234567"
-    }
-  ];
   const[allUsers, setAllUsers] = useState([])
   const [loading, setLoading] = useState(true);
-  const [selectedDeleteCompanyId, setSelectedDeleteCompanyId] = useState(null);
+  const [selectedDeleteUserId, setSelectedDeleteUserId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,21 +25,21 @@ const UsersApprove = () => {
     fetchData();
   }, []);
 
-  const handleDelete = async (companyId) => {
-    setSelectedDeleteCompanyId(companyId);
-    console.log("delete console");
+  const handleDelete = async (userId) => {
+    setSelectedDeleteUserId(userId);
+    console.log(userId);
   };
   const confirmDelete = async () => {
     // try {
     //   const token = localStorage.getItem("jwttoken");
 
-    //   await deleteCompany(selectedDeleteCompanyId, token);
+    //   await deleteCompany(selectedDeleteUserId, token);
     //   setApproved((prevCompanies) =>
     //     prevCompanies.filter(
-    //       (company) => company._id !== selectedDeleteCompanyId
+    //       (company) => company._id !== selectedDeleteUserId
     //     )
     //   );
-    //   setSelectedDeleteCompanyId(null);
+    //   setSelectedDeleteUserId(null);
     //   toast.success("Company deleted successfully!");
     // } catch (error) {
     //   console.error(error.response.data.message);
@@ -110,7 +82,7 @@ const UsersApprove = () => {
                 Approve
               </button> */}
               <button
-                onClick={() => console.log("Reject action")}
+                onClick={() => handleDelete(user._id)}
                 className="mx-2 rounded flex items-center justify-center bg-red-500 px-1 py-1 text-white hover:bg-red-600"
               >
                 <IoTrashSharp />
@@ -125,11 +97,11 @@ const UsersApprove = () => {
       </div>
 
       {/* Modal for delete confirmation */}
-      <Transition show={selectedDeleteCompanyId !== null} as={React.Fragment}>
+      <Transition show={selectedDeleteUserId !== null} as={React.Fragment}>
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={() => setSelectedDeleteCompanyId(null)}
+          onClose={() => setSelectedDeleteUserId(null)}
         >
           <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
             <Transition.Child
@@ -206,7 +178,7 @@ const UsersApprove = () => {
                     Delete
                   </button>
                   <button
-                    onClick={() => setSelectedDeleteCompanyId(null)}
+                    onClick={() => setSelectedDeleteUserId(null)}
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
                   >

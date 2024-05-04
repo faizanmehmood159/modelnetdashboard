@@ -76,17 +76,17 @@ const Navbar = (props) => {
               <div className="h-px w-full bg-gray-200 dark:bg-white/20 " />
 
               <div className="flex flex-col p-4">
-                {adminType !== "admin" &&(
+                {/* {adminType !== "admin" &&(
                 <Link
                   to={profileLink}
                   className="text-sm text-gray-800 dark:text-white hover:dark:text-white"
                 >
                   Profile Settings
                 </Link>
-                )}
+                )} */}
                 <button
                   onClick={handleLogout}
-                  className="mt-3 text-left text-sm font-medium text-red-500 hover:text-red-500"
+                  className="mt-0 text-left text-sm font-medium text-red-500 hover:text-red-500"
                 > 
                   Log Out
                 </button>

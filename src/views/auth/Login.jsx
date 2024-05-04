@@ -122,7 +122,8 @@ export default function Login() {
       ) : (
         <>
           <div className="flex h-screen items-center justify-center">
-            <div className="w-full max-w-[420px] bg-white p-4 shadow-lg">
+            <div className="w-full max-w-[420px] bg-white p-4 shadow-lg rounded-tr-full rounded-tl-full">
+              <div className="bg-blue-100 rounded-tl-full rounded-tr-full p-4">
               <div className="my-6 flex items-center justify-center">
                 <img src={logo} alt="logo" className="h-32" />
               </div>
@@ -176,6 +177,7 @@ export default function Login() {
                   Login
                 </button>
               </form>
+              </div>
             </div>
           </div>
         </>

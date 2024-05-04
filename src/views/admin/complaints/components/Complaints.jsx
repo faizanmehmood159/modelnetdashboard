@@ -24,13 +24,12 @@ const Complaints = () => {
     try {
       setLoading(true);
       const response = await getAllComplaints();
-      console.log(complaints);
       setComplaints(response.data.data.complaints);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching complaints:", error);
       setLoading(false);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -41,16 +40,13 @@ const Complaints = () => {
 
   const handleResolve = async (complaintId) => {
     setSelectedComplaintId(complaintId);
-    
   };
-
 
   const confirmResolve = async () => {
     try {
       setLoading(true);
-      const response = await resolveComplaint(selectedComplaintId);
-      console.log(response)
-      fetchData()
+      await resolveComplaint(selectedComplaintId);
+      fetchData();
       toast.success("Compalaint Resolved successfully!");
     } catch (error) {
       console.error(error);
@@ -86,51 +82,59 @@ const Complaints = () => {
 
         {/* Render content based on the active tab */}
         {activeTab === "pending" && (
-      <div className="mt-4 grid max-h-[70vh] grid-cols-1 gap-4 overflow-y-auto p-4 md:grid-cols-2 lg:grid-cols-3">
-      {loading ? (
-        <div className="col-span-full py-4 text-center">Loading...</div>
-      ) : (
-        complaints.map((item) => (
-          item.status === "pending" && (
-            <div key={item.id} className="rounded-lg bg-blue-100 p-6 shadow-md">
-              <div className="flex flex-row items-center justify-between">
-                <h3 className="mb-4 text-lg font-semibold">{item.name}</h3>
-                <p className="mb-4 text-sm">12-jan-2022</p>
-              </div>
-      
-              <div className="mb-2 flex items-center justify-between text-sm text-gray-900">
-                <p className="text-blue-600">
-                  <BsEnvelopeFill />{" "}
-                </p>{" "}
-                <p>{item.email}</p>
-              </div>
-              <div className="mb-2 flex items-center justify-between text-sm  text-gray-900">
-                <p className="text-blue-600 ">
-                  <BsPhoneFill />
-                </p>{" "}
-                <p> {item.phone_no}</p>
-              </div>
-              <div className="mb-2 flex items-center text-sm text-gray-900">
-                <p className="text-blue-600 ">
-                  <BsQuestionCircleFill />{" "}
-                </p>
-                <span className="text-blue-600 ">Complaint:</span>
-              </div>
-              <div className="text-xs">
-                <p> {item.complaint}</p>
-              </div>
-      
-              <div className="flex justify-center mt-4">
-                <button onClick={() => handleResolve(item._id)} className="rounded-full bg-green-500 p-2 text-white shadow-lg hover:bg-green-600">
-                  <FaRegThumbsUp />
-                </button>
-              </div>
-            </div>
-          )
-        ))
-      )}
-    </div>
-    
+          <div className="mt-4 grid max-h-[70vh] grid-cols-1 gap-4 overflow-y-auto p-4 md:grid-cols-2 lg:grid-cols-3">
+            {loading ? (
+              <div className="col-span-full py-4 text-center">Loading...</div>
+            ) : (
+              complaints.map(
+                (item) =>
+                  item.status === "pending" && (
+                    <div
+                      key={item._id}
+                      className="rounded-lg bg-blue-100 p-6 shadow-md"
+                    >
+                      <div className="flex flex-row items-center justify-between">
+                        <h3 className="mb-4 text-lg font-semibold">
+                          {item.name}
+                        </h3>
+                        <p className="mb-4 text-sm">12-jan-2022</p>
+                      </div>
+
+                      <div className="mb-2 flex items-center justify-between text-sm text-gray-900">
+                        <p className="text-blue-600">
+                          <BsEnvelopeFill />{" "}
+                        </p>{" "}
+                        <p>{item.email}</p>
+                      </div>
+                      <div className="mb-2 flex items-center justify-between text-sm  text-gray-900">
+                        <p className="text-blue-600 ">
+                          <BsPhoneFill />
+                        </p>{" "}
+                        <p> {item.phone_no}</p>
+                      </div>
+                      <div className="mb-2 flex items-center text-sm text-gray-900">
+                        <p className="text-blue-600 ">
+                          <BsQuestionCircleFill />{" "}
+                        </p>
+                        <span className="text-blue-600 ">Complaint:</span>
+                      </div>
+                      <div className="text-xs">
+                        <p> {item.complaint}</p>
+                      </div>
+
+                      <div className="mt-4 flex justify-center">
+                        <button
+                          onClick={() => handleResolve(item._id)}
+                          className="rounded-full bg-green-500 p-2 text-white shadow-lg hover:bg-green-600"
+                        >
+                          <FaRegThumbsUp />
+                        </button>
+                      </div>
+                    </div>
+                  )
+              )
+            )}
+          </div>
         )}
 
         {activeTab === "approved" && (
@@ -138,41 +142,44 @@ const Complaints = () => {
             {loading ? (
               <div className="col-span-full py-4 text-center">Loading...</div>
             ) : (
-              complaints.map((item) => (
-                item.status === "resolved" && (
-                <div
-                  key={item.id}
-                  className="rounded-lg bg-green-100 p-6 shadow-md"
-                >
-                  <div className="flex flex-row items-center justify-between">
-                    <h3 className="mb-4 text-lg font-semibold">{item.name}</h3>
-                    <p className="mb-4 text-sm">12-jan-2022</p>
-                  </div>
+              complaints.map(
+                (item) =>
+                  item.status === "resolved" && (
+                    <div
+                      key={item._id}
+                      className="rounded-lg bg-green-100 p-6 shadow-md"
+                    >
+                      <div className="flex flex-row items-center justify-between">
+                        <h3 className="mb-4 text-lg font-semibold">
+                          {item.name}
+                        </h3>
+                        <p className="mb-4 text-sm">12-jan-2022</p>
+                      </div>
 
-                  <div className="mb-2 flex items-center justify-between text-sm text-gray-900">
-                    <p className="text-green-600">
-                      <BsEnvelopeFill />{" "}
-                    </p>{" "}
-                    <p>{item.email}</p>
-                  </div>
-                  <div className="mb-2 flex items-center justify-between text-sm  text-gray-900">
-                    <p className="text-green-600 ">
-                      <BsPhoneFill />
-                    </p>{" "}
-                    <p> {item.phone}</p>
-                  </div>
-                  <div className="mb-2 flex items-center text-sm text-gray-900">
-                    <p className="text-green-600 ">
-                      <BsQuestionCircleFill />{" "}
-                    </p>
-                    <span className="text-green-600 ">Complaint:</span>
-                  </div>
-                  <div className="text-xs">
-                    <p> {item.complaint}</p>
-                  </div>
-                </div>
-                )
-              ))
+                      <div className="mb-2 flex items-center justify-between text-sm text-gray-900">
+                        <p className="text-green-600">
+                          <BsEnvelopeFill />{" "}
+                        </p>{" "}
+                        <p>{item.email}</p>
+                      </div>
+                      <div className="mb-2 flex items-center justify-between text-sm  text-gray-900">
+                        <p className="text-green-600 ">
+                          <BsPhoneFill />
+                        </p>{" "}
+                        <p> {item.phone}</p>
+                      </div>
+                      <div className="mb-2 flex items-center text-sm text-gray-900">
+                        <p className="text-green-600 ">
+                          <BsQuestionCircleFill />{" "}
+                        </p>
+                        <span className="text-green-600 ">Complaint:</span>
+                      </div>
+                      <div className="text-xs">
+                        <p> {item.complaint}</p>
+                      </div>
+                    </div>
+                  )
+              )
             )}
           </div>
         )}

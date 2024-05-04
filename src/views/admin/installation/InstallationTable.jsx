@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { FaRegThumbsUp, FaThumbsDown } from "react-icons/fa";
 import { getAllInstallations } from "api/admin/installations";
+import { approveInstallation } from "api/admin/installations";
+import { toast } from "react-toastify";
+import { rejectInstallation } from "api/admin/installations";
 const InstallationTable = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const [allInstallations, setAllInstallations] = useState([]);
@@ -10,91 +13,56 @@ const InstallationTable = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-  const [unapprovedCompanies, setUnapprovedCompanies] = useState([]);
-  const [approved, setApproved] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
-  const [rejectCompanyId, setRejectCompanyId] = useState(null);
+  const [selectedApproveId, setSelectedApproveId] = useState(null);
+  const [rejectInstallationId, setRejectInstallationId] = useState(null);
 
-  const [selectedDeleteCompanyId, setSelectedDeleteCompanyId] = useState(null);
+  
+  const fetchData = async () => {
+    try {
+      const response = await getAllInstallations();
+      console.log(response.data.data.installations);
+      setAllInstallations(response.data.data.installations);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching installations:", error);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllInstallations();
-        console.log(response.data.data.installations);
-        setAllInstallations(response.data.data.installations);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching installations:", error);
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
-  const handleApprove = async (companyId) => {
-    setSelectedCompanyId(companyId);
+  const handleApprove = async (id) => {
+    setSelectedApproveId(id);
   };
 
-  const handleReject = async (companyId) => {
-    setRejectCompanyId(companyId);
-  };
-
-  const handleDelete = async (companyId) => {
-    setSelectedDeleteCompanyId(companyId);
-    console.log("delete console");
+  const handleReject = async (id) => {
+    setRejectInstallationId(id);
   };
 
   const confirmApprove = async () => {
-    // try {
-    //   const token = localStorage.getItem("jwttoken");
-    //   await approveCompany(selectedCompanyId);
-    //   setUnapprovedCompanies((prevCompanies) =>
-    //     prevCompanies.filter((company) => company._id !== selectedCompanyId)
-    //   );
-    //   setSelectedCompanyId(null);
-    //   const approvedResponse = await getApprovedPendingCompany(token);
-    //   setApproved(approvedResponse.data.data);
-    //   toast.success("Company approved successfully!");
-    // } catch (error) {
-    //   console.error(error.response.data.message);
-    //   toast.error(error.response.data.message);
-    // }
+    try {
+      await approveInstallation(selectedApproveId);
+      fetchData();
+      toast.success("Installation approved successfully!");
+    } catch (error) {
+      console.error(error.response.data.message);
+      toast.error(error);
+    } finally{
+      setSelectedApproveId(null);
+    }
   };
   const confirmReject = async () => {
-    // try {
-    //   const token = localStorage.getItem("jwttoken");
-    //   const response = await rejectCompany(rejectCompanyId);
-    //   setUnapprovedCompanies((prevCompanies) =>
-    //     prevCompanies.filter((company) => company._id !== rejectCompanyId)
-    //   );
-    //   console.log(response);
-    //   setRejectCompanyId(null);
-    //   const approvedResponse = await getApprovedPendingCompany(token);
-    //   setApproved(approvedResponse.data.data);
-    //   toast.success("Company Rejected successfully!");
-    // } catch (error) {
-    //   console.error(error.response.data.message);
-    //   toast.error(error.response.data.message);
-    // }
-  };
-
-  const confirmDelete = async () => {
-    // try {
-    //   const token = localStorage.getItem("jwttoken");
-    //   await deleteCompany(selectedDeleteCompanyId, token);
-    //   setApproved((prevCompanies) =>
-    //     prevCompanies.filter(
-    //       (company) => company._id !== selectedDeleteCompanyId
-    //     )
-    //   );
-    //   setSelectedDeleteCompanyId(null);
-    //   toast.success("Company deleted successfully!");
-    // } catch (error) {
-    //   console.error(error.response.data.message);
-    //   toast.error(error.response.data.message);
-    // }
+    try {
+     await rejectInstallation(rejectInstallationId);
+     fetchData();
+      toast.success("Installation Rejected successfully!");
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setRejectInstallationId(null);
+    }
   };
 
   return (
@@ -154,7 +122,7 @@ const InstallationTable = () => {
                 allInstallations.map(
                   (item, index) =>
                     item.status === "pending" && (
-                      <tr className=" text-center " id={item._id}>
+                      <tr className=" text-center " key={item._id}>
                         <td className="px-4 py-2">{index + 1}</td>
                         <td className="px-4 py-2">{item.name}</td>
                         <td className="px-4 py-2">{item.email}</td>
@@ -162,10 +130,10 @@ const InstallationTable = () => {
                         <td className="px-4 py-2">{item.cnic}</td>
                         <td className="px-4 py-2">{item.address}</td>
                         <td className="px-4 py-2">
-                          <button className="mx-2 rounded bg-green-500 p-2  text-white  shadow-lg hover:bg-green-600">
+                          <button className="mx-2 rounded bg-green-500 p-2  text-white  shadow-lg hover:bg-green-600" onClick={() => handleApprove(item._id)}>
                             <FaRegThumbsUp />
                           </button>
-                          <button className="mx-2 rounded bg-red-500 p-2  text-white  shadow-lg hover:bg-red-600">
+                          <button className="mx-2 rounded bg-red-500 p-2  text-white  shadow-lg hover:bg-red-600" onClick={() => handleReject(item._id)}>
                             <FaThumbsDown />
                           </button>
                         </td>
@@ -201,7 +169,7 @@ const InstallationTable = () => {
                 allInstallations.map(
                   (item, index) =>
                     item.status === "approved" && (
-                      <tr className=" text-center " id={item._id}>
+                      <tr className=" text-center " key={item._id}>
                         <td className="px-4 py-2">{index + 1}</td>
                         <td className="px-4 py-2">{item.name}</td>
                         <td className="px-4 py-2">{item.email}</td>
@@ -248,7 +216,7 @@ const InstallationTable = () => {
                 allInstallations.map(
                   (item, index) =>
                     item.status === "rejected" && (
-                      <tr className=" text-center " id={item._id}>
+                      <tr className=" text-center " key={item._id}>
                         <td className="px-4 py-2">{index + 1}</td>
                         <td className="px-4 py-2">{item.name}</td>
                         <td className="px-4 py-2">{item.email}</td>
@@ -271,107 +239,12 @@ const InstallationTable = () => {
           </table>
         )}
       </div>
-
-      {/* Modal for delete confirmation */}
-      <Transition show={selectedDeleteCompanyId !== null} as={React.Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={() => setSelectedDeleteCompanyId(null)}
-        >
-          <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-            <Transition.Child
-              as={React.Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
-
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="hidden sm:inline-block sm:h-screen sm:align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-
-            <Transition.Child
-              as={React.Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <div className="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                      {/* Heroicon name: outline/check */}
-                      <svg
-                        className="h-6 w-6 text-red-600"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    </div>
-                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <Dialog.Title
-                        as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900"
-                      >
-                        Confirm Delete
-                      </Dialog.Title>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Are you sure you want to Delete this company?
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  <button
-                    onClick={confirmDelete}
-                    type="button"
-                    className="border-transparent inline-flex w-full justify-center rounded-md border bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => setSelectedDeleteCompanyId(null)}
-                    type="button"
-                    className="hover:bg-gray-50 mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition>
       {/* Modal for Approve confirmation */}
-      <Transition show={selectedCompanyId !== null} as={React.Fragment}>
+      <Transition show={selectedApproveId !== null} as={React.Fragment}>
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={() => setSelectedCompanyId(null)}
+          onClose={() => setSelectedApproveId(null)}
         >
           <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
             <Transition.Child
@@ -433,7 +306,7 @@ const InstallationTable = () => {
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          Are you sure you want to Approve this company?
+                          Are you sure you want to Approve this Installation?
                         </p>
                       </div>
                     </div>
@@ -448,7 +321,7 @@ const InstallationTable = () => {
                     Approve
                   </button>
                   <button
-                    onClick={() => setSelectedCompanyId(null)}
+                    onClick={() => setSelectedApproveId(null)}
                     type="button"
                     className="hover:bg-gray-50 mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
                   >
@@ -462,11 +335,11 @@ const InstallationTable = () => {
       </Transition>
 
       {/* Modal for Reject confirmation */}
-      <Transition show={rejectCompanyId !== null} as={React.Fragment}>
+      <Transition show={rejectInstallationId !== null} as={React.Fragment}>
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={() => setRejectCompanyId(null)}
+          onClose={() => setRejectInstallationId(null)}
         >
           <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
             <Transition.Child
@@ -528,7 +401,7 @@ const InstallationTable = () => {
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          Are you sure you want to Reject this company?
+                          Are you sure you want to Reject this Installation?
                         </p>
                       </div>
                     </div>
@@ -543,7 +416,7 @@ const InstallationTable = () => {
                     Reject
                   </button>
                   <button
-                    onClick={() => setRejectCompanyId(null)}
+                    onClick={() => setRejectInstallationId(null)}
                     type="button"
                     className="hover:bg-gray-50 mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
                   >

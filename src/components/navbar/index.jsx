@@ -23,10 +23,7 @@ const Navbar = (props) => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    localStorage.setItem("jwttoken", "");
-    localStorage.setItem("adminType", "");
-    localStorage.setItem("id", "");
-    localStorage.setItem("companyImage", "");
+    localStorage.removeItem("login");
     navigate("/auth/login");
     toast.success("Logged out Successfully.");
   };

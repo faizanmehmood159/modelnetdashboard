@@ -10,14 +10,10 @@ const App = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const adminType = localStorage.getItem("adminType");
-    const jwtToken = localStorage.getItem("jwttoken");
-
-    if (adminType === "company" && jwtToken) {
-      navigate("/company");
-    } else if (adminType === "admin" && jwtToken) {
+    const login = localStorage.getItem("login");
+    if (login === "true") {
       navigate("/admin");
-    } else if (!adminType && !jwtToken) {
+    } else if (!login) {
       navigate("/auth");
     }
   }, []);

@@ -22,8 +22,9 @@ export const addUser = async (data) => {
 };
 
 export const deleteUser = async (id) => {
+  console.log()
   try {
-    const response = await axios.delete(`${API_AUTH_URL}deleteUserById?_id=${id}`,{});
+    const response = await axios.post(`${API_AUTH_URL}deleteUser?_id=${id}`,{});
     return response;
   } catch (error) {
     throw error;

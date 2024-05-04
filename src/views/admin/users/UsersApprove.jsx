@@ -6,23 +6,21 @@ import { IoTrashSharp } from "react-icons/io5";
 import { getAllUsers } from "api/admin/users";
 import { deleteUser } from "api/admin/users";
 const UsersApprove = () => {
-  const[allUsers, setAllUsers] = useState([])
+  const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDeleteUserId, setSelectedDeleteUserId] = useState(null);
-
+  const fetchData = async () => {
+    try {
+      const response = await getAllUsers();
+      setAllUsers(response.data.data.users);
+      console.log(allUsers);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllUsers();
-        setAllUsers(response.data.data.users)
-        console.log(allUsers);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -34,6 +32,7 @@ const UsersApprove = () => {
     try {
       await deleteUser(selectedDeleteUserId);
       setSelectedDeleteUserId(null);
+      fetchData();
       toast.success("User deleted successfully!");
     } catch (error) {
       toast.error(error);
@@ -43,50 +42,48 @@ const UsersApprove = () => {
   return (
     <Card extra={"w-full h-full p-4 overflow-hidden overflow-x-auto"}>
       <div className="container mx-auto mt-8">
-        
-
         {/* Render content based on the active tab */}
-       
+
         <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
-      <thead>
-        <tr className="bg-green-200">
-          <th className="px-4 py-2 text-white">#</th>
-          <th className="px-4 py-2 text-white">Name</th>
-          <th className="px-4 py-2 text-white">Email</th>
-          <th className="px-4 py-2 text-white">Ph #</th>
-          <th className="px-4 py-2 text-white">Date joined</th>
-          <th className="px-4 py-2 text-white">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {/* Map through dummy data */}
-        {allUsers.map((user, index) => (
-          <tr key={index} className=" text-center ">
-            <td className="px-4 py-2">{index + 1}</td>
-            <td className="px-4 py-2">{user.name}</td>
-            <td className="px-4 py-2">{user.email}</td>
-            <td className="px-4 py-2">{user.phone_no}</td>
-            <td className="px-4 py-2">{new Date(user.createdAt).toLocaleDateString()}</td>
-            <td className="px-4 py-2 flex items-center justify-center">
-              {/* <button
+          <thead>
+            <tr className="bg-green-200">
+              <th className="px-4 py-2 text-white">#</th>
+              <th className="px-4 py-2 text-white">Name</th>
+              <th className="px-4 py-2 text-white">Email</th>
+              <th className="px-4 py-2 text-white">Ph #</th>
+              <th className="px-4 py-2 text-white">Date joined</th>
+              <th className="px-4 py-2 text-white">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Map through dummy data */}
+            {allUsers.map((user, index) => (
+              <tr key={index} className=" text-center ">
+                <td className="px-4 py-2">{index + 1}</td>
+                <td className="px-4 py-2">{user.name}</td>
+                <td className="px-4 py-2">{user.email}</td>
+                <td className="px-4 py-2">{user.phone_no}</td>
+                <td className="px-4 py-2">
+                  {new Date(user.createdAt).toLocaleDateString()}
+                </td>
+                <td className="flex items-center justify-center px-4 py-2">
+                  {/* <button
                 onClick={() => console.log("Approve action")}
                 className="mx-2 rounded bg-green-500 px-1 py-1 text-white hover:bg-green-600"
               >
                 Approve
               </button> */}
-              <button
-                onClick={() => handleDelete(user._id)}
-                className="mx-2 rounded flex items-center justify-center bg-red-500 px-1 py-1 text-white hover:bg-red-600"
-              >
-                <IoTrashSharp />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-
-   
+                  <button
+                    onClick={() => handleDelete(user._id)}
+                    className="mx-2 flex items-center justify-center rounded bg-red-500 px-1 py-1 text-white hover:bg-red-600"
+                  >
+                    <IoTrashSharp />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Modal for delete confirmation */}
@@ -173,7 +170,7 @@ const UsersApprove = () => {
                   <button
                     onClick={() => setSelectedDeleteUserId(null)}
                     type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
+                    className="hover:bg-gray-50 mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
                   >
                     Cancel
                   </button>

@@ -155,7 +155,6 @@ const InstallationTable = () => {
                 <th className="px-4 py-2 text-white">Ph #</th>
                 <th className="px-4 py-2 text-white">CNIC</th>
                 <th className="px-4 py-2 text-white">Address</th>
-                <th className="px-4 py-2 text-white">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -176,14 +175,6 @@ const InstallationTable = () => {
                         <td className="px-4 py-2">{item.phone_no}</td>
                         <td className="px-4 py-2">{item.cnic}</td>
                         <td className="px-4 py-2">{item.address}</td>
-                        <td className="px-4 py-2">
-                          <button className="mx-2 rounded bg-green-500 p-2  text-white  shadow-lg hover:bg-green-600">
-                            <FaRegThumbsUp />
-                          </button>
-                          <button className="mx-2 rounded bg-red-500 p-2  text-white  shadow-lg hover:bg-red-600">
-                            <FaThumbsDown />
-                          </button>
-                        </td>
                       </tr>
                     )
                 )
@@ -202,7 +193,6 @@ const InstallationTable = () => {
                 <th className="px-4 py-2 text-white">Ph #</th>
                 <th className="px-4 py-2 text-white">CNIC</th>
                 <th className="px-4 py-2 text-white">Address</th>
-                <th className="px-4 py-2 text-white">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -223,14 +213,6 @@ const InstallationTable = () => {
                         <td className="px-4 py-2">{item.phone_no}</td>
                         <td className="px-4 py-2">{item.cnic}</td>
                         <td className="px-4 py-2">{item.address}</td>
-                        <td className="px-4 py-2">
-                          <button className="mx-2 rounded bg-green-500 p-2  text-white  shadow-lg hover:bg-green-600">
-                            <FaRegThumbsUp />
-                          </button>
-                          <button className="mx-2 rounded bg-red-500 p-2  text-white  shadow-lg hover:bg-red-600">
-                            <FaThumbsDown />
-                          </button>
-                        </td>
                       </tr>
                     )
                 )

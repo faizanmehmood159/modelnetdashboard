@@ -20,3 +20,12 @@ export const addUser = async (data) => {
     throw error;
   }
 };
+
+export const deleteUser = async (id) => {
+  try {
+    const response = await axios.post(`${API_AUTH_URL}deleteUserById/${id}`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

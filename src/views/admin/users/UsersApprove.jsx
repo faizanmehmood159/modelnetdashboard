@@ -4,6 +4,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
 import { IoTrashSharp } from "react-icons/io5";
 import { getAllUsers } from "api/admin/users";
+import { deleteUser } from "api/admin/users";
 const UsersApprove = () => {
   const[allUsers, setAllUsers] = useState([])
   const [loading, setLoading] = useState(true);
@@ -30,21 +31,13 @@ const UsersApprove = () => {
     console.log(userId);
   };
   const confirmDelete = async () => {
-    // try {
-    //   const token = localStorage.getItem("jwttoken");
-
-    //   await deleteCompany(selectedDeleteUserId, token);
-    //   setApproved((prevCompanies) =>
-    //     prevCompanies.filter(
-    //       (company) => company._id !== selectedDeleteUserId
-    //     )
-    //   );
-    //   setSelectedDeleteUserId(null);
-    //   toast.success("Company deleted successfully!");
-    // } catch (error) {
-    //   console.error(error.response.data.message);
-    //   toast.error(error.response.data.message);
-    // }
+    try {
+      await deleteUser(selectedDeleteUserId);
+      setSelectedDeleteUserId(null);
+      toast.success("User deleted successfully!");
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
@@ -163,7 +156,7 @@ const UsersApprove = () => {
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          Are you sure you want to Delete this company?
+                          Are you sure you want to Delete this User?
                         </p>
                       </div>
                     </div>

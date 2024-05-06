@@ -8,16 +8,17 @@ import Auth from "layouts/auth";
 import ChatwootWidget from "../src/views/auth/chat"
 
 const App = () => {
-  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const login = localStorage.getItem("login");
-  //   if (login === "true") {
-  //     navigate("/admin");
-  //   } else if (!login) {
-  //     navigate("/auth");
-  //   }
-  // }, []);
+  const navigate = useNavigate();
+console.log("navigate",navigate)
+  useEffect(() => {
+    const login = localStorage.getItem("login");
+    if (login === "true") {
+      navigate("/admin");
+    } else if (!login) {
+      navigate("/auth");
+    }
+  }, []);
 
   return (
     <>
@@ -25,9 +26,7 @@ const App = () => {
       <Routes>
         <Route path="auth/*" element={<Auth />} />
         <Route path="admin/*" element={<Admin />} />
-        {/* <Route path="/" element={<Navigate to="/admin" replace />} /> */}
-        <Route path="/" element={<ChatwootWidget />} />
-
+        <Route path="/" element={<Navigate to="/admin" replace />} />
       </Routes>
     </>
   );

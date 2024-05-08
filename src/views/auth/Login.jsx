@@ -4,8 +4,8 @@ import logo from "../../assets/img/auth/logo.png";
 import { toast } from "react-toastify";
 import { adminSignIn } from "api/admin/admin";
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("modelNet@gmail.com");
+  const [password, setPassword] = useState("ModelNet512");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);

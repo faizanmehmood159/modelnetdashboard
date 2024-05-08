@@ -5,7 +5,6 @@ import Admin from "layouts/admin";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Auth from "layouts/auth";
-import ChatwootWidget from "../src/views/auth/chat"
 
 const App = () => {
 

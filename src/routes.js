@@ -6,6 +6,8 @@ import { BsGlobe, BsQuestionCircle } from "react-icons/bs";
 import ComplaintsMain from "views/admin/complaints/components";
 import Installation from "views/admin/installation";
 import Users from "views/admin/users";
+import { HiSupport } from "react-icons/hi";
+import Support from "views/admin/support";
 
 const routes = [
   {
@@ -36,13 +38,13 @@ const routes = [
     icon: <BsQuestionCircle className="h-6 w-6" />,
     component: <ComplaintsMain />,
   },
-  // {
-  //   name: "Info",
-  //   layout: "/admin",
-  //   path: "info",
-  //   icon: <BsInfoCircleFill className="h-6 w-6" />,
-  //   component: <Info />,
-  // },
+  {
+    name: "Support",
+    layout: "/admin",
+    path: "support",
+    icon: <HiSupport className="h-6 w-6" />,
+    component: <Support />,
+  },
   // {
   //   name: "Info Hub",
   //   layout: "/admin",

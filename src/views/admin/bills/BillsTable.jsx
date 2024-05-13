@@ -7,6 +7,7 @@ import { approveInstallation } from "api/admin/installations";
 import { toast } from "react-toastify";
 import { rejectInstallation } from "api/admin/installations";
 import { getAllBills } from "api/bills";
+import { approveBill } from "api/bills";
 const InstallationTable = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const [allInstallations, setAllInstallations] = useState([]);
@@ -44,9 +45,14 @@ const InstallationTable = () => {
 
   const confirmApprove = async () => {
     try {
-      await approveInstallation(selectedApproveId);
+      const body = {
+        billId: selectedApproveId,
+        status: "approved",
+      }
+      await approveBill(body);
       fetchData();
       toast.success("Installation approved successfully!");
+      fetchBills()
     } catch (error) {
       console.error(error.response.data.message);
       toast.error(error);
@@ -76,12 +82,25 @@ const InstallationTable = () => {
   const fetchBills = async () => {
     try {
       const response = await getAllBills();
-      console.log(response.data.data.bills);
-      setBills(response.data.data.bills);
+      console.log("all bills", response.data.data.pendingBills)
+      setBills( response.data.data.pendingBills);
     } catch (error) {
       console.error('Error fetching bills:', error);
     }
   };
+
+  function parsePackage(packageString) {
+    const packageObject = {};
+    packageString = packageString.replace(/^{+|}+$/g, "");
+    const pairs = packageString.split(",\n");
+    pairs.forEach((pair) => {
+      const [key, value] = pair.split(":").map((part) => part.trim());
+      const cleanKey = key.replace(/'/g, "");
+      const cleanValue = value.replace(/'/g, "");
+      packageObject[cleanKey] = cleanValue;
+    });
+    return packageObject;
+  }
 
   // get all Bills Api end
   return (
@@ -116,7 +135,6 @@ const InstallationTable = () => {
               <tr className="bg-green-200">
                 <th className="px-4 py-2 text-white">#</th>
                 <th className="px-4 py-2 text-white">Name</th>
-                <th className="px-4 py-2 text-white">Email</th>
                 <th className="px-4 py-2 text-white">Package</th>                
                 <th className="px-4 py-2 text-white">Price</th>
                 <th className="px-4 py-2 text-white">Action</th>
@@ -135,16 +153,12 @@ const InstallationTable = () => {
                     item.status === "pending" && (
                       <tr className=" text-center " key={item._id}>
                         <td className="px-4 py-2">{index + 1}</td>
-                        <td className="px-4 py-2">{item.user.name}</td>
-                        <td className="px-4 py-2">{item.user.email}</td>                        
-                        <td className="px-4 py-2">{item.packages.label}</td>                        
-                        <td className="px-4 py-2">{item.packages.price} Pkr</td>
+                        <td className="px-4 py-2">{item.userId.name}</td>                      
+                        <td className="px-4 py-2">{parsePackage(item.packages[0]).label}</td>                        
+                        <td className="px-4 py-2">{parsePackage(item.packages[0]).price} Pkr</td>
                         <td className="px-4 py-2">
                           <button className="mx-2 rounded bg-green-500 p-2  text-white  shadow-lg hover:bg-green-600" onClick={() => handleApprove(item._id)}>
-                            <FaRegThumbsUp />
-                          </button>
-                          <button className="mx-2 rounded bg-red-500 p-2  text-white  shadow-lg hover:bg-red-600" onClick={() => handleReject(item._id)}>
-                            <FaThumbsDown />
+                            Approve
                           </button>
                         </td>
                       </tr>
@@ -156,40 +170,37 @@ const InstallationTable = () => {
         )}
 
         {activeTab === "approved" && (
-          <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
-            <thead>
-              <tr className="bg-green-200">
-                <th className="px-4 py-2 text-white">#</th>
-                <th className="px-4 py-2 text-white">Name</th>
-                <th className="px-4 py-2 text-white">Email</th>
-                <th className="px-4 py-2 text-white">Package</th>                
-                <th className="px-4 py-2 text-white">Price</th>
-                <th className="px-4 py-2 text-white">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="7" className="py-4 text-center">
-                    Loading...
-                  </td>
-                </tr>
-              ) : (
-                bills.map(
-                  (item, index) =>
-                    item.status === "approved" && (
-                      <tr className=" text-center " key={item._id}>
-                        <td className="px-4 py-2">{index + 1}</td>
-                        <td className="px-4 py-2">{item.user.name}</td>
-                        <td className="px-4 py-2">{item.user.email}</td>                                        
-                        <td className="px-4 py-2">{item.packages.label}</td>                        
-                        <td className="px-4 py-2">{item.packages.price} Pkr</td>
-                      </tr>
-                    )
-                )
-              )}
-            </tbody>
-          </table>
+           <table className="mt-4 max-h-[70vh] w-full overflow-x-auto overflow-y-auto">
+           <thead>
+             <tr className="bg-green-200">
+               <th className="px-4 py-2 text-white">#</th>
+               <th className="px-4 py-2 text-white">Name</th>
+               <th className="px-4 py-2 text-white">Package</th>                
+               <th className="px-4 py-2 text-white">Price</th>
+             </tr>
+           </thead>
+           <tbody>
+             {loading ? (
+               <tr>
+                 <td colSpan="7" className="py-4 text-center">
+                   Loading...
+                 </td>
+               </tr>
+             ) : (
+               bills.map(
+                 (item, index) =>
+                   item.status === "approved" && (
+                     <tr className=" text-center " key={item._id}>
+                       <td className="px-4 py-2">{index + 1}</td>
+                       <td className="px-4 py-2">{item.userId.name}</td>                      
+                       <td className="px-4 py-2">{parsePackage(item.packages[0]).label}</td>                        
+                       <td className="px-4 py-2">{parsePackage(item.packages[0]).price} Pkr</td>
+                     </tr>
+                   )
+               )
+             )}
+           </tbody>
+         </table>
         )}
       </div>
       {/* Modal for Approve confirmation */}

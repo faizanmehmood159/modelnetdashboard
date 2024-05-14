@@ -2,12 +2,13 @@ import React from "react";
 import MainDashboard from "views/admin/default";
 import { FaUsers } from "react-icons/fa";
 import { MdHome } from "react-icons/md";
-import { BsGlobe, BsQuestionCircle } from "react-icons/bs";
+import { BsGlobe, BsQuestionCircle, BsReceipt } from "react-icons/bs";
 import ComplaintsMain from "views/admin/complaints/components";
 import Installation from "views/admin/installation";
 import Users from "views/admin/users";
 import { HiSupport } from "react-icons/hi";
 import Support from "views/admin/support";
+import Bills from "views/admin/bills";
 
 const routes = [
   {
@@ -30,6 +31,13 @@ const routes = [
     path: "installation",
     icon: <BsGlobe className="h-6 w-6" />,
     component: <Installation />,
+  },
+  {
+    name: "Bills",
+    layout: "/admin",
+    path: "bills",
+    icon: <BsReceipt className="h-6 w-6" />,
+    component: <Bills />,
   },
   {
     name: "Complain",
